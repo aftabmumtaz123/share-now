@@ -1,0 +1,1 @@
+import Link from "next/link";export default function Unauthorized(){return <main style={{padding:60,textAlign:"center"}}><h1>Access denied</h1><p>You do not have permission to access this page.</p><Link href="/dashboard">Return to workspace</Link></main>}
