@@ -52,3 +52,11 @@ export const Conversation = models.Conversation || model("Conversation", Convers
 export const Message = models.Message || model("Message", MessageSchema);
 export const FileAsset = models.FileAsset || model("FileAsset", FileAssetSchema);
 export const Session = models.Session || model("Session", SessionSchema);
+
+const PostSchema = new Schema({
+  authorId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
+  text: { type: String, required: true, trim: true, maxlength: 2000 },
+  likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  comments: [{ userId: { type: Schema.Types.ObjectId, ref: "User", required: true }, text: { type: String, required: true, maxlength: 500 }, createdAt: { type: Date, default: Date.now } }]
+}, { timestamps: true });
+export const Post = models.Post || model("Post", PostSchema);
