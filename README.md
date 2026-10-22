@@ -69,3 +69,9 @@ No Socket.IO dependency is added; this project remains a Next.js application usi
 - The avatar upload endpoint requires an authenticated session and validates file type and size.
 
 Configure `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` as usual.
+
+## Profile customization update
+
+The profile page now supports editing the display name and bio, uploading a profile photo and cover banner, and viewing the user's own post history beneath profile details. Profile edits are saved through `PATCH /api/profile`; photo/banner images are uploaded through `POST /api/profile/avatar` using the `kind` field (`avatar` or `banner`). Avatar images are limited to 5 MB and cover banners to 8 MB; both accept JPG, PNG, and WebP. Configure the existing MongoDB and Cloudinary environment variables before testing uploads.
+
+The username and six-digit connection code remain read-only by design. Profile posts are loaded from the authenticated feed endpoint and filtered to the current user's posts.

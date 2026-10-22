@@ -7,6 +7,7 @@ const UserSchema = new Schema({
   role: { type: String, enum: ["admin", "user"], default: "user", index: true },
   connectionCode: { type: String, required: true, unique: true, index: true },
   avatar: { type: String, default: "" }, avatarAssetId: { type: String, default: "" },
+  bio: { type: String, default: "", maxlength: 300 }, banner: { type: String, default: "" }, bannerAssetId: { type: String, default: "" },
   email: { type: String, default: "" }, status: { type: String, enum: ["active", "disabled"], default: "active", index: true },
   createdBy: { type: Schema.Types.ObjectId, ref: "User" }, lastLoginAt: Date
 }, { timestamps: true });
@@ -55,7 +56,8 @@ export const Session = models.Session || model("Session", SessionSchema);
 
 const PostSchema = new Schema({
   authorId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
-  text: { type: String, required: true, trim: true, maxlength: 2000 },
+  text: { type: String, default: "", trim: true, maxlength: 2000 },
+  imageUrl: { type: String, default: "" },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   comments: [{ userId: { type: Schema.Types.ObjectId, ref: "User", required: true }, text: { type: String, required: true, maxlength: 500 }, createdAt: { type: Date, default: Date.now } }]
 }, { timestamps: true });

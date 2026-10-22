@@ -24,7 +24,7 @@ export async function getCurrentUser() {
   await connectDB();
   const session = await Session.findOne({ tokenHash, expiresAt: { $gt: new Date() } });
   if (!session) return null;
-  const user = await User.findOne({ _id: session.userId, status: "active" }).select("_id username displayName role connectionCode avatar email");
+  const user = await User.findOne({ _id: session.userId, status: "active" }).select("_id username displayName role connectionCode avatar email bio banner");
   return user;
 }
 export async function requireUser() {
