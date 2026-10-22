@@ -13,10 +13,7 @@ export function errorResponse(error: unknown) {
         : 400;
 
   return NextResponse.json(
-    {
-      ok: false,
-      error: message,
-    },
+    { ok: false, error: message },
     { status }
   );
 }
