@@ -11,7 +11,7 @@ export default async function PersonProfile({ params }: { params: { id: string }
   const me = await getCurrentUser();
   if (!me) notFound();
 
-  const person = await User.findOne({ _id: params.id, status: "active", role: "user" })
+  const person: any = await User.findOne({ _id: params.id, status: "active", role: "user" })
     .select("displayName username avatar banner bio createdAt")
     .lean();
   if (!person) notFound();
