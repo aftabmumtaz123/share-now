@@ -277,7 +277,21 @@ export default function ChatClient() {
         <div className="chat-search"><Search size={16} /><input aria-label="Search conversations" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search conversations…" /></div>
         <div className="chat-list-scroll">
           {filteredConversations.map(c => (
-            <button type="button" className={`chat-person chat-person-modern ${selected === c._id ? "selected" : ""}`} key={c._id} onClick={() => setSelected(c._id)}>
+            <button
+              type="button"
+              className={`chat-person chat-person-modern ${selected === c._id ? "selected" : ""}`}
+              key={c._id}
+              onClick={() => {
+                // On mobile, reopening the already-selected conversation must still
+                // switch from the inbox pane to the chat pane.
+                setMobileChatOpen(true);
+                if (selected === c._id) {
+                  void loadMessages(c._id);
+                } else {
+                  setSelected(c._id);
+                }
+              }}
+            >
               <div className={`chat-avatar ${c.type === "group" ? "group-avatar" : ""}`}>{c.title.trim().charAt(0).toUpperCase() || <MessageCircle size={17} />}</div>
               <div className="chat-person-copy"><div className="chat-person-title"><strong>{c.title}</strong><span>{timeLabel(c.lastMessageAt)}</span></div><div className="chat-person-preview">{c.lastMessage || "Start a conversation"}</div></div>
             </button>

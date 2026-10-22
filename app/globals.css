@@ -184,3 +184,68 @@ h1 { font:800 28px Manrope,sans-serif;letter-spacing:-1px;margin:7px 0 0; }
 .message-menu .message-menu-reactions button{display:grid;place-items:center;padding:6px 5px;font-size:15px}
 .edit-glyph{font-size:15px;line-height:1}
 @media(max-width:700px){.message-menu{max-width:calc(100vw - 30px)}.message-menu-reactions{justify-content:space-between}}
+
+
+/* Mobile layout hardening: real device viewport + single-pane chat navigation */
+@media screen and (max-width: 760px) {
+  html, body { width: 100%; min-width: 0; overflow-x: hidden; }
+  .app-shell { display: flex; flex-direction: column; min-height: 100dvh; width: 100%; }
+  .sidebar { width: 100%; max-width: 100%; min-width: 0; height: auto; padding: 10px 12px; display: flex; flex-direction: row; align-items: center; gap: 10px; overflow-x: auto; overscroll-behavior-x: contain; border-right: 0; border-bottom: 1px solid var(--line); }
+  .brand { flex: 0 0 auto; padding: 0 4px; font-size: 17px; gap: 7px; }
+  .brand-mark { width: 30px; height: 30px; border-radius: 10px; }
+  .sidebar nav { display: flex !important; flex: 0 0 auto; gap: 4px !important; }
+  .nav-item { flex: 0 0 auto; width: auto; white-space: nowrap; padding: 9px 11px; font-size: 12px; }
+  .nav-label, .side-bottom { display: none !important; }
+  .main { width: 100%; min-width: 0; padding: 18px 12px max(12px, env(safe-area-inset-bottom)); }
+  .topbar { margin-bottom: 18px; gap: 10px; }
+  h1 { font-size: clamp(23px, 6vw, 28px); line-height: 1.2; letter-spacing: -.7px; }
+  .subtitle { font-size: 13px; line-height: 1.5; }
+  .chat-layout, .chat-layout-modern { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; height: min(68dvh, 650px); min-height: 430px; border-radius: 16px; overflow: hidden; }
+  .chat-list-modern { width: 100%; min-width: 0; height: 100%; border: 0; }
+  .chat-window-modern { display: none; width: 100%; min-width: 0; height: 100%; min-height: 0; }
+  .chat-layout-modern.mobile-chat-open { display: block; }
+  .chat-layout-modern.mobile-chat-open .chat-list-modern { display: none; }
+  .chat-layout-modern.mobile-chat-open .chat-window-modern { display: flex; }
+  .chat-list-heading { padding: 15px 14px 12px; }
+  .chat-title { font-size: 17px; }
+  .chat-caption { font-size: 11px; }
+  .chat-search { margin: 0 12px 10px; height: 42px; }
+  .chat-list-scroll { padding: 0 8px 8px; }
+  .chat-person-modern { padding: 12px 9px; }
+  .chat-person-title strong { max-width: 58%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chat-window-modern .chat-header { min-height: 62px; padding: 10px; gap: 8px; }
+  .mobile-back { display: inline-grid !important; }
+  .chat-header-copy { min-width: 0; flex: 1; }
+  .chat-header-copy strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+  .chat-header-copy span { font-size: 10px; }
+  .chat-header-actions { gap: 2px; }
+  .chat-header-actions .icon-btn { width: 31px; height: 31px; }
+  .messages-modern { min-height: 0; padding: 12px 9px; gap: 9px; overscroll-behavior: contain; }
+  .message-row { max-width: 100%; }
+  .bubble-modern { max-width: min(88%, 420px); padding: 10px 11px; overflow-wrap: anywhere; }
+  .bubble-text { overflow-wrap: anywhere; word-break: break-word; font-size: 13px; }
+  .reply-quote p { max-width: 55vw; }
+  .message-actions { display: none !important; }
+  .message-more { opacity: 1; width: 28px; height: 28px; }
+  .message-menu { position: absolute; right: 0; top: 30px; max-width: calc(100vw - 42px); }
+  .composer-modern { padding: 9px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .composer-row { display: flex; align-items: flex-end; gap: 7px; }
+  .composer-tool { width: 38px; height: 40px; border-radius: 11px; }
+  .message-input { width: 0; flex: 1 1 auto; min-width: 0; min-height: 40px; max-height: 100px; padding: 10px; font-size: 16px; resize: none; }
+  .composer-hint { display: none !important; }
+  .send-button { width: 40px; height: 40px; border-radius: 11px; }
+  .chat-error { margin: 7px; padding: 9px; overflow-wrap: anywhere; }
+  .message-search { gap: 6px; padding: 8px; }
+  .message-search input { font-size: 14px; }
+  .message-search span { display: none; }
+}
+@media screen and (max-width: 380px) {
+  .sidebar { gap: 6px; padding-inline: 8px; }
+  .brand { font-size: 15px; }
+  .nav-item { padding: 8px 9px; }
+  .nav-item svg { display: none; }
+  .main { padding-inline: 9px; }
+  .chat-list-heading { padding-inline: 11px; }
+  .chat-window-modern .chat-header { gap: 5px; }
+  .chat-header-actions .icon-btn { width: 29px; }
+}
