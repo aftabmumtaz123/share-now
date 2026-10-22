@@ -304,6 +304,15 @@ h1 { font:800 28px Manrope,sans-serif;letter-spacing:-1px;margin:7px 0 0; }
 .composer-top{display:flex;align-items:flex-start;gap:12px}
 .composer-top textarea{resize:vertical;min-height:76px;max-height:200px;flex:1;min-width:0;border:0;outline:0;background:#fafbfe;border-radius:13px;padding:13px 14px;font-size:13px;line-height:1.6;color:var(--ink)}
 .composer-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding-top:13px;border-top:1px solid #f0f2f6}
+.post-add-image{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:#6558e8;font-size:12px;font-weight:700;padding:8px 4px;cursor:pointer;white-space:nowrap}
+.post-add-image:disabled{opacity:.55;cursor:not-allowed}
+.composer-helper{font-size:10px!important;flex:1}
+.post-image-preview-wrap{position:relative;margin:14px 0 0 54px;max-width:520px;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#f7f8fc}
+.post-image-preview{display:block;width:100%;max-height:360px;object-fit:contain}
+.post-image-remove{position:absolute;top:9px;right:9px;display:grid;place-items:center;width:32px;height:32px;border:0;border-radius:50%;background:#111827cc;color:white;cursor:pointer}
+.post-image-link{display:block;margin:12px 0 4px;overflow:hidden;border-radius:12px;background:#f7f8fc}
+.post-feed-image{display:block;width:100%;max-height:620px;object-fit:contain;margin:0 auto}
+.spin{animation:post-spin 1s linear infinite}@keyframes post-spin{to{transform:rotate(360deg)}}
 .composer-bottom .muted{display:flex;align-items:center;gap:7px;font-size:11px}
 .feed-heading{display:flex;align-items:center;justify-content:space-between}
 .feed-heading h2,.social-side h2{font:700 16px Manrope,sans-serif;margin:0}
@@ -354,7 +363,7 @@ h1 { font:800 28px Manrope,sans-serif;letter-spacing:-1px;margin:7px 0 0; }
 .social-feed{display:grid;gap:14px}
 .social-feed h2{font:700 17px Manrope,sans-serif;margin:0}
 @media(max-width:1000px){.social-columns{grid-template-columns:minmax(0,1fr) 280px}.social-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:760px){.welcome-banner{align-items:flex-start}.welcome-user{align-items:flex-start;gap:11px}.welcome-user h1{font-size:21px;line-height:1.25}.welcome-user .subtitle{font-size:12px;max-width:360px}.welcome-user .eyebrow{font-size:9px}.welcome-banner>.btn{font-size:0;padding:11px;flex-shrink:0}.welcome-banner>.btn svg{width:18px;height:18px}.social-columns{grid-template-columns:minmax(0,1fr)}.social-side{grid-template-columns:1fr}.social-stats{gap:9px}.social-stat{padding:13px;gap:5px 8px}.social-stat span{font-size:11px}.social-stat strong{font-size:23px}.social-stat small{font-size:10px}.post-composer,.post-card,.social-side .panel{padding:14px}.composer-bottom{align-items:flex-start;flex-direction:column}.composer-bottom .btn{width:100%}.post-copy{font-size:13px}.person-hero{gap:12px}.person-hero .profile-photo{width:66px;height:66px}}
+@media(max-width:760px){.composer-bottom{flex-wrap:wrap}.composer-helper{order:3;flex-basis:100%}.composer-bottom>.btn{margin-left:auto}.post-image-preview-wrap{margin-left:0}.post-feed-image{max-height:460px}.welcome-banner{align-items:flex-start}.welcome-user{align-items:flex-start;gap:11px}.welcome-user h1{font-size:21px;line-height:1.25}.welcome-user .subtitle{font-size:12px;max-width:360px}.welcome-user .eyebrow{font-size:9px}.welcome-banner>.btn{font-size:0;padding:11px;flex-shrink:0}.welcome-banner>.btn svg{width:18px;height:18px}.social-columns{grid-template-columns:minmax(0,1fr)}.social-side{grid-template-columns:1fr}.social-stats{gap:9px}.social-stat{padding:13px;gap:5px 8px}.social-stat span{font-size:11px}.social-stat strong{font-size:23px}.social-stat small{font-size:10px}.post-composer,.post-card,.social-side .panel{padding:14px}.composer-bottom{align-items:flex-start;flex-direction:column}.composer-bottom .btn{width:100%}.post-copy{font-size:13px}.person-hero{gap:12px}.person-hero .profile-photo{width:66px;height:66px}}
 @media(max-width:380px){.social-stats{grid-template-columns:1fr 1fr}.social-stat{padding:11px}.social-stat>svg{width:32px;height:32px}.welcome-user .social-avatar{width:44px!important;height:44px!important}}
 
 .person-profile-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.person-profile-actions .muted{flex-basis:100%;font-size:12px}.person-profile-actions .secondary{background:#f1f2f7;color:#354052}
