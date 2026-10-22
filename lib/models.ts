@@ -32,7 +32,8 @@ const MessageSchema = new Schema({
   conversationId: { type: Schema.Types.ObjectId, ref: "Conversation", required: true, index: true },
   senderId: { type: Schema.Types.ObjectId, ref: "User", required: true }, messageType: { type: String, enum: ["text", "attachment"], default: "text" },
   text: { type: String, default: "", maxlength: 5000 }, attachments: [AttachmentSchema], replyTo: { type: Schema.Types.ObjectId, ref: "Message" },
-  editedAt: Date, deletedAt: Date
+  editedAt: Date, deletedAt: Date,
+  reactions: [{ userId: { type: Schema.Types.ObjectId, ref: "User", required: true }, emoji: { type: String, required: true, enum: ["👍", "❤️", "😂", "😮", "😢", "🎉"] } }]
 }, { timestamps: true });
 const FileAssetSchema = new Schema({
   uploaderId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },

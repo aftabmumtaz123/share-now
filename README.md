@@ -10,10 +10,10 @@ A lightweight private messaging and file-sharing starter built entirely in Next.
 - Six-digit connection codes and connection request API
 - Direct/group messaging data models and protected message API
 - Cloudinary server-side upload/deletion helpers and attachment API
-- Responsive app shell and chat-oriented starter UI
+- Responsive messaging UI with conversation search, message search, replies, soft-delete, and cursor-based message history
 - No Socket.IO, no video uploads, no public registration
 
-> This ZIP is a functional starter/MVP foundation, not a fully production-audited messaging product. Review the TODOs and complete the test checklist before inviting real users. Messaging UI uses ordinary HTTP requests, not realtime delivery.
+> This ZIP is a functional starter/MVP foundation, not a fully production-audited messaging product. Review the TODOs and complete the test checklist before inviting real users. Messaging uses ordinary HTTP requests, not realtime delivery. Socket.IO, online presence, typing indicators, read receipts, reactions, and attachment-to-message linking are not implemented in this build.
 
 ## Setup
 1. Install Node.js 20+.
@@ -49,3 +49,14 @@ A lightweight private messaging and file-sharing starter built entirely in Next.
 - Add upload/deletion retry queue and reconciliation job for Cloudinary failures.
 - Add cursor pagination, CSRF/origin checks appropriate to your auth setup, persistent rate limiting, audit logs, and monitoring.
 - Run `npm run build` and test on a staging database before production.
+
+## Messaging UI enhancements
+
+The messaging experience includes a responsive inbox and conversation view, conversation/message search, cursor-based loading of older messages, replies, attachment sharing, and message actions. The messaging upgrade also supports:
+
+- Editing your own text messages (saved to MongoDB with an edited timestamp).
+- Emoji reactions (👍, ❤️, 😂, 😮, 😢, 🎉), with one reaction per emoji per user and toggle-to-remove behavior.
+- Reaction counts and a highlighted state for reactions you have selected.
+- Server-side conversation access checks for edit and reaction requests.
+
+No Socket.IO dependency is added; this project remains a Next.js application using its existing API routes and database-backed message history.
