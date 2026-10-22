@@ -514,3 +514,8 @@ h1 { font:800 28px Manrope,sans-serif;letter-spacing:-1px;margin:7px 0 0; }
 .person-profile-post-heading p{font-size:12px;margin:0}
 .person-profile-posts .profile-empty-posts{min-height:145px}
 @media(max-width:650px){.person-profile-cover{height:175px}.person-profile-identity{padding:0 16px 18px;gap:12px}.person-profile-avatar{width:82px!important;height:82px!important;flex-basis:82px;margin-top:-36px}.person-profile-name{min-width:calc(100% - 100px);padding-top:10px}.person-profile-name h1{font-size:20px}.person-profile-details{grid-template-columns:1fr;padding:17px 18px;gap:16px}.person-profile-identity .person-profile-actions{width:100%}.person-profile-post-heading h2{font-size:18px}}
+
+/* Owner-only post deletion action */
+.post-delete-button{margin-left:auto;color:#8b95a5;}
+.post-delete-button:hover{color:#dc2626;background:#fff1f2;border-color:#fecdd3;}
+.profile-post-author .post-delete-button{margin-left:auto;flex:0 0 34px;}

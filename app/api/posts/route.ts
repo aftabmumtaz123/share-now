@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/db";
 import { Post, Connection, User } from "@/lib/models";
 import { requireUser } from "@/lib/auth";
 import { z } from "zod";
-import { v2 as cloudinary } from "cloudinary";
+import { cloudinary } from "@/lib/cloudinary";
 
 export async function GET() {
   try {
