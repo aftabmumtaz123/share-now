@@ -60,3 +60,12 @@ The messaging experience includes a responsive inbox and conversation view, conv
 - Server-side conversation access checks for edit and reaction requests.
 
 No Socket.IO dependency is added; this project remains a Next.js application using its existing API routes and database-backed message history.
+
+## Profile pictures and chat sender identity
+
+- Users can upload JPG, PNG, or WebP profile pictures from the Profile section (maximum 5 MB).
+- Avatar files are stored in Cloudinary and the profile URL/asset ID are stored on the user record in MongoDB.
+- Incoming group messages display the sender's name and profile image, with an initial fallback when no avatar is set.
+- The avatar upload endpoint requires an authenticated session and validates file type and size.
+
+Configure `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET` as usual.

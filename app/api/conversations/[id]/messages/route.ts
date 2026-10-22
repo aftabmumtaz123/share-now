@@ -22,10 +22,10 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
       if (cursorMessage) filter.createdAt = { $lt: cursorMessage.createdAt };
     }
 
-    const found = await Message.find(filter).sort({ createdAt: -1, _id: -1 }).limit(limit + 1).populate("replyTo", "text senderId").lean() as any[];
+    const found = await Message.find(filter).sort({ createdAt: -1, _id: -1 }).limit(limit + 1).populate("replyTo", "text senderId").populate("senderId", "displayName username avatar").lean() as any[];
     const hasMore = found.length > limit;
     const messages = found.slice(0, limit).reverse().map((m: any) => ({
-      ...m, _id: String(m._id), senderId: String(m.senderId),
+      ...m, _id: String(m._id), sender: m.senderId && typeof m.senderId === "object" ? { id: String(m.senderId._id), displayName: m.senderId.displayName, username: m.senderId.username, avatar: m.senderId.avatar || "" } : null, senderId: String(m.senderId?._id || m.senderId),
       reactions: (m.reactions || []).map((r: any) => ({ userId: String(r.userId), emoji: r.emoji })),
       replyTo: m.replyTo ? { _id: String(m.replyTo._id), text: m.replyTo.text, senderId: String(m.replyTo.senderId) } : undefined
     }));

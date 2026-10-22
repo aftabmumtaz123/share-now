@@ -26,8 +26,9 @@ type Message = {
   replyTo?: { _id: string; text: string; senderId?: string } | string;
   attachments?: { url: string; name: string; mimeType: string; sizeBytes?: number }[];
   reactions?: { userId: string; emoji: string }[];
+  sender?: { id: string; displayName: string; username: string; avatar?: string } | null;
 };
-type CurrentUser = { id: string; displayName: string; username: string };
+type CurrentUser = { id: string; displayName: string; username: string; avatar?: string };
 
 function timeLabel(value?: string) {
   if (!value) return "";
@@ -325,7 +326,10 @@ export default function ChatClient() {
               return <div key={m._id}>
                 {showDay && <div className="date-divider"><span>{day}</span></div>}
                 <div className={`message-row ${mine ? "outgoing" : "incoming"}`}>
-                  <div className={`bubble bubble-modern ${mine ? "mine" : ""}`}>
+                  {!mine && <div className="message-sender-avatar" title={m.sender?.displayName || "Sender"}>{m.sender?.avatar ? <img src={m.sender.avatar} alt="" /> : (m.sender?.displayName || "?").trim().charAt(0).toUpperCase()}</div>}
+                  <div className={`message-content ${mine ? "mine-content" : "incoming-content"}`}>
+                    {!mine && activeConversation.type === "group" && <div className="message-sender-name">{m.sender?.displayName || m.sender?.username || "Group member"}</div>}
+                    <div className={`bubble bubble-modern ${mine ? "mine" : ""}`}>
                     {reply && <div className={`reply-quote ${mine ? "reply-quote-mine" : ""}`}><span>Replying to message</span><p>{reply.text || "Message unavailable"}</p></div>}
                     {editingId === m._id ? <div className="message-edit-form"><textarea aria-label="Edit message" value={editingText} onChange={e => setEditingText(e.target.value)} autoFocus maxLength={5000} /><div><button type="button" onClick={() => { setEditingId(""); setEditingText(""); }}>Cancel</button><button type="button" className="save-edit" disabled={!editingText.trim() || savingEdit} onClick={() => void editMessage(m)}>{savingEdit ? "Saving…" : "Save"}</button></div></div> : <div className="bubble-text">{m.text}</div>}
                     {m.attachments?.map((attachment, index) => <div className="chat-attachment" key={`${m._id}-${index}`}>
@@ -342,6 +346,7 @@ export default function ChatClient() {
                     </div>
                     <button className="message-more" aria-label="Message actions" onClick={() => setMenuFor(menuFor === m._id ? "" : m._id)}><MoreHorizontal size={15} /></button>
                     {menuFor === m._id && <div className="message-menu"><button onClick={() => { setReplyTo(m); setMenuFor(""); inputRef.current?.focus(); }}><Reply size={14} /> Reply</button><button onClick={() => copyMessage(m)}><Copy size={14} /> Copy text</button>{mine && <button onClick={() => { setEditingId(m._id); setEditingText(m.text); setMenuFor(""); }}><span className="edit-glyph">✎</span> Edit message</button>}<div className="message-menu-reactions">{["👍", "❤️", "😂", "😮", "😢", "🎉"].map(emoji => <button type="button" key={emoji} title={`React ${emoji}`} onClick={() => void toggleReaction(m, emoji)}>{emoji}</button>)}</div>{mine && <button className="danger-action" onClick={() => deleteMessage(m)}><Trash2 size={14} /> Delete</button>}</div>}
+                    </div>
                   </div>
                 </div>
               </div>;
