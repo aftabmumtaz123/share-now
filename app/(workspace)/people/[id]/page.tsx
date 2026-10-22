@@ -17,7 +17,9 @@ export default async function PersonProfile({ params }: { params: { id: string }
   if (!person) notFound();
 
   const isSelf = String(me._id) === String(person._id);
-  const connection = isSelf ? null : await Connection.findOne({
+  // Mongoose lean() can infer a document-array union for this query; explicitly
+  // narrow the optional single connection document for its status fields.
+  const connection: any = isSelf ? null : await Connection.findOne({
     $or: [
       { requester: me._id, recipient: person._id },
       { requester: person._id, recipient: me._id },
