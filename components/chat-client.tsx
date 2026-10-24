@@ -11,6 +11,7 @@ type Conversation = {
   _id: string;
   type: "direct" | "group";
   title: string;
+  avatar?: string;
   lastMessage?: string;
   lastMessageAt?: string;
 };
