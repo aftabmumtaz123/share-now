@@ -12,7 +12,7 @@ export async function GET() {
     const ids = new Set<string>([String(me._id)]);
     accepted.forEach((c:any) => { ids.add(String(c.requester)); ids.add(String(c.recipient)); });
     const posts = await Post.find({ authorId: { $in: [...ids] } }).sort({ createdAt: -1 }).limit(50).populate("authorId", "displayName username avatar").populate("comments.userId", "displayName username avatar").lean();
-    return NextResponse.json({ ok: true, posts: posts.map((p:any)=>({...p,_id:String(p._id),author:{...p.authorId,_id:String(p.authorId._id)},likes:(p.likes||[]).map(String),comments:(p.comments||[]).map((c:any)=>({...c,_id:String(c._id),user:{...c.userId,_id:String(c.userId._id)}}))})) });
+    return NextResponse.json({ ok: true, posts: posts.map((p:any)=>({...p,_id:String(p._id),author:{...p.authorId,_id:String(p.authorId._id)},likes:(p.likes||[]).map(String),isSaved:(p.savedBy||[]).some((id:any)=>String(id)===String(me._id)),comments:(p.comments||[]).map((c:any)=>({...c,_id:String(c._id),user:{...c.userId,_id:String(c.userId._id)}}))})) });
   } catch(e) { return NextResponse.json({ok:false,error:e instanceof Error?e.message:"Could not load posts"},{status:401}); }
 }
 export async function POST(req: NextRequest) {
@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
 
     let text = "";
     let imageUrl = "";
+    let imagePublicId = "";
     const contentType = req.headers.get("content-type") || "";
 
     if (contentType.includes("multipart/form-data")) {
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest) {
           stream.end(bytes);
         });
         imageUrl = (uploaded as any).secure_url;
+        imagePublicId = (uploaded as any).public_id;
       } else if (file && !(file instanceof File)) {
         return NextResponse.json({ ok: false, error: "Invalid image upload." }, { status: 400 });
       }
@@ -62,7 +64,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Write something or add an image before publishing." }, { status: 400 });
     }
 
-    const post = await Post.create({ authorId: me._id, text, imageUrl });
+    const post = await Post.create({ authorId: me._id, text, imageUrl, imagePublicId });
     return NextResponse.json({ ok: true, post: { _id: String(post._id), text: post.text, imageUrl: post.imageUrl, createdAt: post.createdAt, author: { _id: String(me._id), displayName: me.displayName, username: me.username, avatar: me.avatar }, likes: [], comments: [] } }, { status: 201 });
   } catch (e) {
     if (uploaded?.public_id) {

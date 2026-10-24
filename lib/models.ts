@@ -18,8 +18,15 @@ const ConnectionSchema = new Schema({
 }, { timestamps: true });
 const GroupSchema = new Schema({
   name: { type: String, required: true }, description: { type: String, default: "" }, avatar: String,
-  avatarAssetId: String, members: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  avatarAssetId: String, members: [{ type: Schema.Types.ObjectId, ref: "User" }], moderators: [{ type: Schema.Types.ObjectId, ref: "User" }],
   createdBy: { type: Schema.Types.ObjectId, ref: "User" }, status: { type: String, enum: ["active", "archived"], default: "active" }
+}, { timestamps: true });
+const GroupActivitySchema = new Schema({
+  groupId: { type: Schema.Types.ObjectId, ref: "Group", required: true, index: true },
+  actorId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  action: { type: String, required: true, maxlength: 60 },
+  targetUserId: { type: Schema.Types.ObjectId, ref: "User" },
+  details: { type: String, default: "", maxlength: 300 }
 }, { timestamps: true });
 const ConversationSchema = new Schema({
   type: { type: String, enum: ["direct", "group"], required: true, index: true },
@@ -49,6 +56,7 @@ const SessionSchema = new Schema({ userId: { type: Schema.Types.ObjectId, ref: "
 export const User = models.User || model("User", UserSchema);
 export const Connection = models.Connection || model("Connection", ConnectionSchema);
 export const Group = models.Group || model("Group", GroupSchema);
+export const GroupActivity = models.GroupActivity || model("GroupActivity", GroupActivitySchema);
 export const Conversation = models.Conversation || model("Conversation", ConversationSchema);
 export const Message = models.Message || model("Message", MessageSchema);
 export const FileAsset = models.FileAsset || model("FileAsset", FileAssetSchema);
@@ -58,7 +66,9 @@ const PostSchema = new Schema({
   authorId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
   text: { type: String, default: "", trim: true, maxlength: 2000 },
   imageUrl: { type: String, default: "" },
+  imagePublicId: { type: String, default: "" },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  savedBy: [{ type: Schema.Types.ObjectId, ref: "User", index: true }],
   comments: [{ userId: { type: Schema.Types.ObjectId, ref: "User", required: true }, text: { type: String, required: true, maxlength: 500 }, createdAt: { type: Date, default: Date.now } }]
 }, { timestamps: true });
 export const Post = models.Post || model("Post", PostSchema);
