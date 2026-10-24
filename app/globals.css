@@ -723,3 +723,15 @@ body { background:var(--page-bg); }
 .logo-file-label input { position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer; }
 .theme-preview-brand img { width:29px;height:29px;object-fit:contain;border-radius:8px;background:white;padding:2px; }
 @media(max-width:700px){.brand-logo-image{width:30px;height:30px}.logo-upload-row{align-items:flex-start;flex-direction:column}}
+
+/* Group imagery and theme-aware messaging */
+.group-icon{overflow:hidden;display:grid;place-items:center;flex-shrink:0}
+.group-avatar-image,.chat-avatar-image{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.chat-layout-modern{border:1px solid var(--line);background:var(--panel-bg,#fff)}
+.chat-list-modern,.chat-window-modern,.chat-header,.chat-list-footer{background:var(--panel-bg,#fff)}
+.chat-header{border-bottom-color:var(--line)}
+.messages-modern{background:var(--page-bg,#f8f9fc)}
+.bubble-modern.mine{background:var(--chat-outgoing,#e9e7ff);border-color:color-mix(in srgb,var(--chat-brand,#635bff) 18%, transparent)}
+.bubble-modern:not(.mine){background:var(--chat-incoming,#fff);border-color:var(--line)}
+.chat-person-modern.selected{background:color-mix(in srgb,var(--chat-brand,#635bff) 10%, var(--panel-bg,#fff))}
+.icon-btn:hover,.icon-btn.active{background:color-mix(in srgb,var(--chat-brand,#635bff) 10%, var(--panel-bg,#fff));color:var(--chat-brand,#635bff);border-color:color-mix(in srgb,var(--chat-brand,#635bff) 18%, transparent)}

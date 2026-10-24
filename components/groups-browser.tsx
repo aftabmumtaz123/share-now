@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Search, UsersRound, MessageCircle, Clock3, Archive, Users } from "lucide-react";
-type GroupItem={_id:string;name:string;description:string;status:"active"|"archived";membersCount:number;updatedAt:string;lastMessage:string;lastMessageAt:string|null};
+type GroupItem={_id:string;name:string;description:string;avatar?:string;status:"active"|"archived";membersCount:number;updatedAt:string;lastMessage:string;lastMessageAt:string|null};
 // Use an explicit locale and timezone so SSR and the browser render identical date text.
 function formatGroupDate(value:string){return new Date(value).toLocaleDateString("en-US",{month:"short",day:"numeric",timeZone:"UTC"});}
 export default function GroupsBrowser({groups}:{groups:GroupItem[]}){
@@ -15,7 +15,7 @@ export default function GroupsBrowser({groups}:{groups:GroupItem[]}){
    <div className="groups-filters" role="group" aria-label="Filter groups">{([{id:"all",label:`All groups (${groups.length})`},{id:"active",label:`Active (${activeCount})`},{id:"archived",label:`Archived (${archivedCount})`}] as const).map(f=><button type="button" key={f.id} className={`groups-filter ${filter===f.id?"selected":""}`} onClick={()=>setFilter(f.id)}>{f.label}</button>)}</div>
   </section>
   {visible.length ? <div className="groups-grid">{visible.map(g=><article className="group-card" key={g._id}>
-   <div className="group-card-top"><div className="group-icon"><UsersRound size={22}/></div><span className={`badge ${g.status==="archived"?"archived":""}`}>{g.status==="active"?"Active":"Archived"}</span></div>
+   <div className="group-card-top"><div className="group-icon">{g.avatar ? <img src={g.avatar} alt={`${g.name} group`} className="group-avatar-image" /> : <UsersRound size={22}/>}</div><span className={`badge ${g.status==="archived"?"archived":""}`}>{g.status==="active"?"Active":"Archived"}</span></div>
    <div className="group-card-body"><h2>{g.name}</h2><p className="muted group-description">{g.description||"A private group space for conversations and shared materials."}</p>
     <div className="group-meta"><span><Users size={15}/>{g.membersCount} {g.membersCount===1?"member":"members"}</span>{g.lastMessageAt&&<span title={new Date(g.lastMessageAt).toLocaleString()}><Clock3 size={14}/>{formatGroupDate(g.lastMessageAt)}</span>}</div>
     <div className="group-last-message"><MessageCircle size={15}/><span>{g.lastMessage||"No messages yet. Start the conversation."}</span></div>

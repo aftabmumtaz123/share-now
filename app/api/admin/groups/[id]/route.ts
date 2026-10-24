@@ -53,13 +53,16 @@ export async function DELETE(_req: NextRequest, ctx: { params: { id: string } })
     const group = await Group.findById(id).lean();
     if (!group) return NextResponse.json({ ok: false, error: "Group not found." }, { status: 404 });
     const admin = await requireAdmin();
-    const conversations = await Conversation.find({ type: "group", groupId: group._id }).select("_id").lean();
+    // Mongoose lean() can infer a document-or-array union for loosely typed models.
+    // findById() returns one record, so narrow the result before accessing its fields.
+    const groupRecord = group as any;
+    const conversations = await Conversation.find({ type: "group", groupId: groupRecord._id }).select("_id").lean();
     const conversationIds = conversations.map((c: any) => c._id);
     const assets = await FileAsset.find({ conversationId: { $in: conversationIds }, status: { $ne: "deleted" } }).select("_id cloudinaryPublicId resourceType").lean();
     const cleanupErrors: string[] = [];
-    if (group.avatarAssetId) {
+    if (groupRecord.avatarAssetId) {
       try {
-        const removed = await deleteCloudinaryAsset(group.avatarAssetId, "image");
+        const removed = await deleteCloudinaryAsset(groupRecord.avatarAssetId, "image");
         if (!removed) cleanupErrors.push("group-avatar");
       } catch { cleanupErrors.push("group-avatar"); }
     }
@@ -75,8 +78,8 @@ export async function DELETE(_req: NextRequest, ctx: { params: { id: string } })
     await Message.deleteMany({ conversationId: { $in: conversationIds } });
     await FileAsset.deleteMany({ conversationId: { $in: conversationIds } });
     await Conversation.deleteMany({ _id: { $in: conversationIds } });
-    await GroupActivity.create({ groupId: group._id, actorId: admin._id, action: "group.deleted", details: `Group ${group.name} permanently deleted` });
-    await Group.deleteOne({ _id: group._id });
+    await GroupActivity.create({ groupId: groupRecord._id, actorId: admin._id, action: "group.deleted", details: `Group ${groupRecord.name} permanently deleted` });
+    await Group.deleteOne({ _id: groupRecord._id });
     return NextResponse.json({ ok: true, deletedId: id });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not delete group.";

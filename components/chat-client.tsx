@@ -24,7 +24,7 @@ type Message = {
   editedAt?: string;
   deletedAt?: string;
   replyTo?: { _id: string; text: string; senderId?: string } | string;
-  attachments?: { fileId?: string; url: string; name: string; mimeType: string; sizeBytes?: number }[];
+  attachments?: { url: string; name: string; mimeType: string; sizeBytes?: number }[];
   reactions?: { userId: string; emoji: string }[];
   sender?: { id: string; displayName: string; username: string; avatar?: string } | null;
 };
@@ -293,7 +293,7 @@ export default function ChatClient() {
                 }
               }}
             >
-              <div className={`chat-avatar ${c.type === "group" ? "group-avatar" : ""}`}>{c.title.trim().charAt(0).toUpperCase() || <MessageCircle size={17} />}</div>
+              <div className={`chat-avatar ${c.type === "group" ? "group-avatar" : ""}`}>{c.avatar ? <img src={c.avatar} alt="" className="chat-avatar-image" /> : c.title.trim().charAt(0).toUpperCase() || <MessageCircle size={17} />}</div>
               <div className="chat-person-copy"><div className="chat-person-title"><strong>{c.title}</strong><span>{timeLabel(c.lastMessageAt)}</span></div><div className="chat-person-preview">{c.lastMessage || "Start a conversation"}</div></div>
             </button>
           ))}
@@ -306,7 +306,7 @@ export default function ChatClient() {
         {activeConversation ? <>
           <header className="chat-header">
             <button type="button" className="icon-btn mobile-back" aria-label="Back to conversations" onClick={() => setMobileChatOpen(false)}><ArrowLeft size={18} /></button>
-            <div className="chat-avatar">{activeConversation.title.trim().charAt(0).toUpperCase()}</div>
+            <div className={`chat-avatar ${activeConversation.type === "group" ? "group-avatar" : ""}`}>{activeConversation.avatar ? <img src={activeConversation.avatar} alt="" className="chat-avatar-image" /> : activeConversation.title.trim().charAt(0).toUpperCase()}</div>
             <div className="chat-header-copy"><strong>{activeConversation.title}</strong><span>{activeConversation.type === "group" ? "Group conversation" : "Private conversation"}</span></div>
             <div className="chat-header-actions">
               <button type="button" className={`icon-btn ${showSearch ? "active" : ""}`} title="Search messages" onClick={() => setShowSearch(v => !v)}><Search size={17} /></button>
@@ -334,7 +334,7 @@ export default function ChatClient() {
                     {editingId === m._id ? <div className="message-edit-form"><textarea aria-label="Edit message" value={editingText} onChange={e => setEditingText(e.target.value)} autoFocus maxLength={5000} /><div><button type="button" onClick={() => { setEditingId(""); setEditingText(""); }}>Cancel</button><button type="button" className="save-edit" disabled={!editingText.trim() || savingEdit} onClick={() => void editMessage(m)}>{savingEdit ? "Saving…" : "Save"}</button></div></div> : <div className="bubble-text">{m.text}</div>}
                     {m.attachments?.map((attachment, index) => <div className="chat-attachment" key={`${m._id}-${index}`}>
                       {attachment.mimeType?.startsWith("image/") ? <a href={attachment.url} target="_blank" rel="noreferrer"><img src={attachment.url} alt={attachment.name} className="chat-attachment-image" /></a> : null}
-                      <a href={attachment.fileId ? `/api/uploads/${encodeURIComponent(String(attachment.fileId))}/download` : attachment.url} className="chat-attachment-link" download={attachment.name}><Paperclip size={14} /><span>{attachment.name}</span></a>
+                      <a href={attachment.url} target="_blank" rel="noreferrer" download={attachment.name} className="chat-attachment-link"><Paperclip size={14} /><span>{attachment.name}</span></a>
                     </div>)}
                     {Boolean(m.reactions?.length) && <div className="reaction-list">{Array.from(new Set(m.reactions?.map(r => r.emoji) || [])).map(emoji => { const count = m.reactions?.filter(r => r.emoji === emoji).length || 0; const reacted = Boolean(m.reactions?.some(r => r.emoji === emoji && r.userId === currentUser?.id)); return <button type="button" key={emoji} className={`reaction-chip ${reacted ? "reacted" : ""}`} onClick={() => void toggleReaction(m, emoji)} aria-label={`React ${emoji}`}>{emoji} <span>{count}</span></button>; })}</div>}
                     <div className="bubble-meta"><span>{timeLabel(m.createdAt)}</span>{m.editedAt && <span>· edited</span>}{mine && <CheckCheck size={13} aria-label="Saved" />}</div>
